@@ -1,0 +1,14 @@
+{
+	"folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "../tip_driver_web"
+    },
+    {
+      "path": "../tip_driver_api"
+    }
+  ],
+  "settings": {}
+}
