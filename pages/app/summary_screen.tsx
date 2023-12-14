@@ -6,6 +6,7 @@ import { CompanyProps, DeviceProps } from '../../resources/types';
 import { Feather } from '@expo/vector-icons';
 import { ScreenProps } from '../../resources/ScreenHOC';
 import * as Linking from 'expo-linking';
+import api from '../../resources/API';
 
 
 export default function SummaryScreen(props: ScreenProps){
@@ -13,6 +14,7 @@ export default function SummaryScreen(props: ScreenProps){
   const { Authorization, companyId, validation } = React.useContext(AppContext)
   const [ company, setCompany ] = React.useState<CompanyProps|void>()
   const [ device, setDevice ] = React.useState<DeviceProps|void>()
+
 
   React.useEffect(() => {
     if(!validation) return
@@ -36,79 +38,57 @@ export default function SummaryScreen(props: ScreenProps){
           )}
         </View>
       </TouchableOpacity>
-    <View gap-5 padding-10 width={250} left>
-      <Button
-        text40T
-        color={Colors.grey30}
-        link
-        size='xSmall'
-        label='Company'
-        avoidInnerPadding
-        iconOnRight
-        iconSource={() => <Feather name='edit-2' color={Colors.grey50} style={{ marginLeft: 10 }} size={20}/>}
-        onPress={() => props.navigation.navigate('Companies')}
-      />
-      {company ? (
-        <Text text30L>{company.name}</Text>
-      ) : (
-        <Text text30L grey40 $textDisabled>None selected</Text>
-      )}
-      
-    </View>
-      
-      <View gap-5 padding-10 width={250} left>
-        <Button
-          text40T
-          color={Colors.grey30}
-          link
-          size='xSmall'
-          label='Device'
-          avoidInnerPadding
-          iconOnRight
-          iconSource={() => <Feather name='edit-2' color={Colors.grey50} style={{ marginLeft: 10 }} size={20}/>}
-          onPress={() => props.navigation.navigate('Devices')}
-        />
-        {device ? (
-          <>
-            <Text text30L>{device.name}</Text>
-            <Text text50L>{device.ip_address}</Text>
-          </>
-        ): (
-          <Text text30L grey40 $textDisabled>None selected</Text>
-        )}
-      </View>
-      <View gap-5 padding-10 width={250} left>
-        <Button
-          text40T
-          color={Colors.grey30}
-          link
-          size='xSmall'
-          label='Payments'
-          avoidInnerPadding
-          iconOnRight
-          iconSource={() => <Feather name='edit-2' color={Colors.grey50} style={{ marginLeft: 10 }} size={20}/>}
-          onPress={() => validation && validation.stripeUpdateLink ? Linking.openURL(validation.stripeUpdateLink) : null}
-        />
-        <Text text30L>{validation.paymentsEnabled ? 'Enabled' : 'Disabled'}</Text>
-      </View>
-      <View gap-5 padding-10 width={250} left>
-        <Button
-          text40T
-          color={Colors.grey30}
-          link
-          size='xSmall'
-          label='Subscription'
-          avoidInnerPadding
-          iconOnRight
-          iconSource={() => <Feather name='edit-2' color={Colors.grey50} style={{ marginLeft: 10 }} size={20}/>}
-          onPress={() => {
-            if(validation.company) {
-              Linking.openURL(process.env.EXPO_PUBLIC_API + '/dash/company/'+validation.company._id + '/settings')
-            }
-          }}
-        />
-        <Text text30L>{validation.accountActive ? 'Active' : 'Disabled'}</Text>
-      </View>
+      <TouchableOpacity
+        onPress={() => props.navigation.navigate('Devices')}
+      >
+        <View gap-5 padding-10 width={250} left>
+          <Text text60L grey40>Device</Text>
+          {device ? (
+            <>
+              <Text text50R>{device.name}</Text>
+              <Text text60R>{device.ip_address}</Text>
+            </>
+          ) : (
+            <Text text50L red20>None Selected</Text>
+          )}
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={async () => {
+          try {
+            
+            // let url = await api.get
+          } catch(e) {
+
+          }
+          validation && validation.stripeUpdateLink ? Linking.openURL(validation.stripeUpdateLink) : null
+        }}
+      >
+        <View gap-5 padding-10 width={250} left>
+          <Text text60L grey40>Payments</Text>
+          {validation.paymentsEnabled ? (
+            <Text text50R>Enabled</Text>
+          ) : (
+            <Text text50L red20>Disabled</Text>
+          )}
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          if(validation.company) {
+            Linking.openURL(process.env.EXPO_PUBLIC_WEB + '/dash/company/'+validation.company._id + '/settings')
+          }
+        }}
+      >
+        <View gap-5 padding-10 width={250} left>
+          <Text text60L grey40>Subscription</Text>
+          {validation.accountActive ? (
+            <Text text50R>Enabled</Text>
+          ) : (
+            <Text text50L red20>None</Text>
+          )}
+        </View>
+      </TouchableOpacity>
     </View>
   )
 }

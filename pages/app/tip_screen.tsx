@@ -11,6 +11,12 @@ import api from '../../resources/API';
 import { AppContext } from '../../resources/AppContext';
 import { Alert, Platform } from 'react-native';
 import { ScreenProps } from '../../resources/ScreenHOC';
+import Root from './Root';
+
+// function Screen(){
+
+//   return <Root/>
+// }
 
 export default function TipScreen(props: ScreenProps){
   const { initialize: initStripe } = useStripeTerminal()
